@@ -32,7 +32,7 @@ let expenses2 = prompt('Введите обязательную статью р�
 console.log(expenses2);
 let amount2 = prompt('Во сколько это обойдётся?', '10000');
 console.log(amount2);
-let budgetMonth = prompt('Бюджет на месяц:', (Number(amount2) + Number(amount1)));
+let budgetMonth = Number(amount2) + Number(amount1);
 console.log(budgetMonth);
 let n = mission / budgetMonth;
 console.log('Миссия будет достигнута через ' + n + ' месяцев');
