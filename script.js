@@ -5,7 +5,7 @@ let mission = 200000;
 
 // функция возвращает и конвертирует любые типы данных в число
 let isNumber = function(n){
-    return !isNaN(parseFloat(n) && isFinite(n));
+    return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 
@@ -24,7 +24,7 @@ let start = function(){
     do {
         money = prompt('Ваш месячный доход');
     }
-    while(isNaN(parseFloat(money)));
+    while(!isNumber(money));
 };
 start();
 // Объявление функции getExpensesMonth. Функция возвращает сумму всех обязательных расходов за месяц
