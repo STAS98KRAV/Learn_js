@@ -14,7 +14,9 @@ start();
 let appData = {
    income:{},
    addIncome:[],
-   deposit:false,
+   deposit:true,
+   percentDeposit:0,
+   moneyDeposit:0,
    mission:50000,
    expenses:{},
    addExpenses:[],
@@ -24,17 +26,42 @@ let appData = {
    budgetMonth:0,
    expensesMonth:0,
    asking: function(){
-       let addExpenses = prompt('Расходы за рассчитываемый период через запятую', 'Коммуналка, еда, проезд');
-       addExpenses = addExpenses.toLowerCase().split(', ');
+       if(confirm('Есть ли у вас дополнительный заработок?')){
+           //let itemIncome = prompt('Какой у вас есть дополнительный зароботок');
+           //let cashIncome = prompt('Сколько в месяц вы на этом зарабатываете?', '10000');
+           //appData.income[itemIncome] = cashIncome;
+           for (let i = 0; i < 2; i++){
+                let quest;
+                let answer;
+                //quest = prompt('Какой у вас есть дополнительный зароботок');
+                do {
+                    quest = prompt('Какой у вас есть дополнительный зароботок');
+                } while(isNumber(quest));
+                do {
+                    answer = prompt('Сколько в месяц вы на этом зарабатываете?', '10000');
+                } while(!isNumber(answer));
+                //записываем расходы месяц с вопросами по типу квартиру = 3000
+                appData.income[quest] = answer;
+            }   
+       }
+       let addExpenses = prompt('Расходы за рассчитываемый период через запятую');
+       let toUpperCaseString = [];
+       addExpenses.split(', ').forEach(function(item){
+           toUpperCaseString.push(item.trim()[0].toUpperCase() + item.trim().slice(1)); 
+       });
+       appData.addExpenses = toUpperCaseString;
        let deposit = confirm('Есть ли у вас депозит в банке');
        for (let i = 0; i < 2; i++){
-            let quest = prompt('Введите обязательную статью расходов', 'Квартплата');
+            let quest;
             let answer;
-            while(!isNumber(answer)){
+            do {
+               quest = prompt('Введите обязательную статью расходов', 'Квартплата');
+            }while(isNumber(quest));
+            do{
                 answer = prompt('Во сколько это обойдётся');
-            }
+            }while(!isNumber(answer));
             //записываем расходы месяц с вопросами по типу квартиру = 3000
-            appData.expenses[quest] = Number(answer);
+            appData.expenses[quest] = answer;
         }   
    },
     //Записываем общую сумму расходов за месяц
@@ -43,11 +70,11 @@ let appData = {
             appData.expensesMonth += appData.expenses[key];
         }
     },
-    getBudget:function(){
+    getBudget: function(){
        appData.budgetMonth = appData.budget - appData.expensesMonth;
        appData.budgetDay = appData.budgetMonth / 30; 
     },
-    getTargetMonth:function  (){
+    getTargetMonth: function  (){
        appData.period = Math.round (appData.mission / appData.budgetMonth);
        if (appData.period > 0){
            console.log('Цель будет достигнута');   
@@ -67,7 +94,21 @@ let appData = {
            return('Что-то пошло не так');
        }
    },
-   
+   getInfoDeposit: function(){
+       if(appData.deposit){
+        //    appData.percentDeposit = prompt('Какой у вас процент?', '10');
+        //    appData.moneyDeposit = prompt ('Какая сумма вашего депозита?', '10000');
+           do {
+            appData.percentDeposit = prompt('Какой у вас процент?', '10');
+           } while (!isNumber(appData.percentDeposit));
+           do {
+            appData.moneyDeposit = prompt ('Какая сумма вашего депозита?', '10000');
+           } while (!isNumber(appData.moneyDeposit));
+       }
+   },
+   calcSavedMoney:function(){
+       return appData.budgetMonth * appData.period;
+   }
               
 };
 appData.asking();
@@ -80,9 +121,10 @@ console.log(appData.getStatusIncome());
 for (let key in appData){
     console.log('Наши данные' + appData[key]);
 }
-
+appData.getInfoDeposit();
+console.log(appData.percentDeposit, appData.moneyDeposit, appData.calcSavedMoney());
 // проверка, чтобы было число
-
+console.log(appData.addExpenses);
 
 
 // Объявление функции getExpensesMonth. Функция возвращает сумму всех обязательных расходов за месяц
