@@ -58,7 +58,7 @@ let appData = {
                quest = prompt('Введите обязательную статью расходов', 'Квартплата');
             }while(isNumber(quest));
             do{
-                answer = prompt('Во сколько это обойдётся');
+                answer = +prompt('Во сколько это обойдётся');
             }while(!isNumber(answer));
             //записываем расходы месяц с вопросами по типу квартиру = 3000
             appData.expenses[quest] = answer;
