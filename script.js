@@ -61,6 +61,11 @@ console.log(targetAmount);
 let periodSelect = document.querySelector('.period-select');
 console.log(periodSelect);
 
+let resultIncomePeriod = document.querySelector('.result-income_period');
+console.log(resultIncomePeriod);
+
+let depositСheck = document.querySelector('#deposit-check');
+
 let periodAmount = document.querySelector('.period-amount');
 
 let incomeItems = document.querySelectorAll('.income-items');
@@ -91,9 +96,9 @@ let appData = {
    expensesMonth:0,
    start: function(){
        
-       appData.budget = +salaryAmount.value;
+       this.budget = +salaryAmount.value;
        //console.log('salaryAmount.value: ', salaryAmount.value);
-       appData.getExpenses();
+       this.getExpenses();
 
 
         // appData.asking();
@@ -114,6 +119,7 @@ let appData = {
         additionalIncomeValue.value = this.addIncome.join(',');
         targetMonthValue.value = Math.ceil(this.getTargetMonth());
         incomePeriodValue.value = this.calcPeriod();
+        //resultIncomePeriod.value = this.resultIncomePeriod;
         document.querySelectorAll('input[type=text]').forEach( function(item){
             item.disabled = true;
         });
@@ -121,7 +127,7 @@ let appData = {
         start.style.display = 'none';
     },
     //отрабатывает когда нажимается кнопка сбросить
-    cancel: function(){
+    reset: function(){
         start.disabled = true;
         btnCanсel.style.display = 'block';
         start.style.display = 'none';
@@ -160,6 +166,14 @@ let appData = {
         this.budgetDay = 0;
         this.budgetMonth = 0;
         this.expensesMonth = 0;
+        periodSelect.value = 0;
+        periodAmount.textContent = 1;
+        start.style.display = 'block';
+        btnCanсel.style.display = 'none';
+        depositСheck.checked = false;
+        // if(depositCheckmark === true){
+        //     depositCheckmark.value = false;
+        // }
     },
     //нажатие на кнопку + 
     addexpensesBlock: function(){
@@ -263,17 +277,27 @@ let appData = {
    },
    calcPeriod:function(){
        return this.budgetMonth * periodSelect.value;
-   }
+   },
+//    calcRange: function(){
+//        return periodSelect.value * salaryAmount;
+//    }
               
 };
 start.addEventListener('click', appData.start.bind(appData));
-btnCanсel.addEventListener('click', appData.cancel.bind(appData));
+btnCanсel.addEventListener('click', appData.reset.bind(appData));
+
+//depositCheckmark.addEventListener('click', appData.deposit);
 
 expensesPlus.addEventListener('click', appData.addexpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('input', function(){
     periodAmount.textContent = periodSelect.value;
+    incomePeriodValue.value = appData.calcPeriod();
 });
+resultIncomePeriod.addEventListener('input', function period(){
+    return periodAmount * periodSelect.value;
+});
+
 start.disabled = true;
 
 
